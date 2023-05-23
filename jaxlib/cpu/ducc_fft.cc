@@ -16,18 +16,18 @@ limitations under the License.
 #include <complex>
 #include <vector>
 
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
+#include "nanobind/nanobind.h"
+#include "nanobind/stl/vector.h"
 #include "jaxlib/cpu/ducc_fft_generated.h"
 #include "jaxlib/cpu/ducc_fft_kernels.h"
-#include "jaxlib/kernel_pybind11_helpers.h"
+#include "jaxlib/kernel_nanobind_helpers.h"
 
-namespace py = pybind11;
+namespace nb = nanobind;
 
 namespace jax {
 namespace {
 
-py::bytes BuildDuccFftDescriptor(const std::vector<uint64_t> &shape,
+nb::bytes BuildDuccFftDescriptor(const std::vector<uint64_t> &shape,
                                  bool is_double, int fft_type,
                                  const std::vector<uint64_t> &fft_lengths,
                                  const std::vector<uint64_t> &strides_in,
@@ -46,22 +46,22 @@ py::bytes BuildDuccFftDescriptor(const std::vector<uint64_t> &shape,
   descriptor.scale = scale;
   flatbuffers::FlatBufferBuilder fbb;
   fbb.Finish(DuccFftDescriptor::Pack(fbb, &descriptor));
-  return py::bytes(reinterpret_cast<char *>(fbb.GetBufferPointer()),
+  return nb::bytes(reinterpret_cast<char *>(fbb.GetBufferPointer()),
                    fbb.GetSize());
 }
 
-py::dict Registrations() {
-  pybind11::dict dict;
+nb::dict Registrations() {
+  nb::dict dict;
   dict["ducc_fft"] = EncapsulateFunction(DuccFft);
   return dict;
 }
 
-PYBIND11_MODULE(_ducc_fft, m) {
+NB_MODULE(_ducc_fft, m) {
   m.def("registrations", &Registrations);
-  m.def("ducc_fft_descriptor", &BuildDuccFftDescriptor, py::arg("shape"),
-        py::arg("is_double"), py::arg("fft_type"), py::arg("fft_lengths"),
-        py::arg("strides_in"), py::arg("strides_out"), py::arg("axes"),
-        py::arg("forward"), py::arg("scale"));
+  m.def("ducc_fft_descriptor", &BuildDuccFftDescriptor, nb::arg("shape"),
+        nb::arg("is_double"), nb::arg("fft_type"), nb::arg("fft_lengths"),
+        nb::arg("strides_in"), nb::arg("strides_out"), nb::arg("axes"),
+        nb::arg("forward"), nb::arg("scale"));
 }
 
 } // namespace

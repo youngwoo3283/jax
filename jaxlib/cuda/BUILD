@@ -111,11 +111,11 @@ pybind_extension(
     deps = [
         ":cublas_kernels",
         ":cuda_vendor",
-        "//jaxlib:kernel_pybind11_helpers",
+        "//jaxlib:kernel_nanobind_helpers",
         "@xla//xla/stream_executor/cuda:cublas_lib",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/strings:str_format",
-        "@pybind11",
+        "@nanobind",
     ],
 )
 
@@ -150,11 +150,11 @@ pybind_extension(
     deps = [
         ":cuda_vendor",
         ":cudnn_rnn_kernels",
-        "//jaxlib:kernel_pybind11_helpers",
+        "//jaxlib:absl_status_casters",
+        "//jaxlib:kernel_nanobind_helpers",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/strings:str_format",
-        "@pybind11",
-        "@pybind11_abseil//pybind11_abseil:status_casters",
+        "@nanobind",
     ],
 )
 
@@ -196,13 +196,13 @@ pybind_extension(
         ":cuda_gpu_kernel_helpers",
         ":cuda_vendor",
         ":cusolver_kernels",
-        "//jaxlib:kernel_pybind11_helpers",
+        "//jaxlib:kernel_nanobind_helpers",
         "@xla//xla/stream_executor/cuda:cudart_stub",
         "@xla//xla/stream_executor/cuda:cusolver_lib",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/strings:str_format",
         "@local_config_cuda//cuda:cuda_headers",
-        "@pybind11",
+        "@nanobind",
     ],
 )
 
@@ -245,7 +245,7 @@ pybind_extension(
         ":cuda_gpu_kernel_helpers",
         ":cuda_vendor",
         ":cusparse_kernels",
-        "//jaxlib:kernel_pybind11_helpers",
+        "//jaxlib:kernel_nanobind_helpers",
         "@xla//xla/stream_executor/cuda:cudart_stub",
         "@xla//xla/stream_executor/cuda:cusparse_lib",
         "@com_google_absl//absl/algorithm:container",
@@ -258,7 +258,7 @@ pybind_extension(
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/synchronization",
         "@local_config_cuda//cuda:cuda_headers",
-        "@pybind11",
+        "@nanobind",
     ],
 )
 
@@ -307,10 +307,10 @@ pybind_extension(
         ":cuda_lu_pivot_kernels",
         ":cuda_lu_pivot_kernels_impl",
         ":cuda_vendor",
-        "//jaxlib:kernel_pybind11_helpers",
+        "//jaxlib:kernel_nanobind_helpers",
         "@xla//xla/stream_executor/cuda:cudart_stub",
         "@local_config_cuda//cuda:cuda_headers",
-        "@pybind11",
+        "@nanobind",
     ],
 )
 
@@ -357,10 +357,10 @@ pybind_extension(
     deps = [
         ":cuda_gpu_kernel_helpers",
         ":cuda_prng_kernels",
-        "//jaxlib:kernel_pybind11_helpers",
+        "//jaxlib:kernel_nanobind_helpers",
         "@xla//xla/stream_executor/cuda:cudart_stub",
         "@local_config_cuda//cuda:cuda_headers",
-        "@pybind11",
+        "@nanobind",
     ],
 )
 
