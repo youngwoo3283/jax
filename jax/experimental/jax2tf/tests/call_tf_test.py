@@ -1324,7 +1324,6 @@ class RoundTripToTfTest(tf_test_util.JaxToTfTestCase):
         jax2tf.call_tf(
             tf_func_3,
             call_tf_graph=True,
-            output_shape_dtype=output_shape_dtype,
         )
     )
     with self.assertRaisesRegex(
@@ -1454,7 +1453,6 @@ class RoundTripToTfTest(tf_test_util.JaxToTfTestCase):
     jax_f = jax2tf.call_tf(
         tf.function(tf_f),
         call_tf_graph=True,
-        output_shape_dtype=jax.ShapeDtypeStruct((10,), jnp.float32),
     )
     tf_f_rt = jax2tf.convert(
         jax_f,
@@ -1485,7 +1483,6 @@ class RoundTripToTfTest(tf_test_util.JaxToTfTestCase):
     call_tf_print = jax2tf.call_tf(
         tf_print,
         call_tf_graph=True,
-        output_shape_dtype=None,
         ordered=True,
     )
 
@@ -1556,8 +1553,7 @@ class RoundTripToTfTest(tf_test_util.JaxToTfTestCase):
       tf_f = lambda x: print(tf.strings.length(tf.constant("hello, world")))
       jax2tf.call_tf(tf_f,
                      call_tf_graph=True,
-                     ordered=ordered,
-                     output_shape_dtype=None)(x)
+                     ordered=ordered)(x)
       return x
 
     x = np.arange(3, dtype=np.int32)

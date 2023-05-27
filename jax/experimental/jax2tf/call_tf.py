@@ -60,12 +60,14 @@ TfVal = jax2tf_internal.TfVal
 # DLPack, if we are careful.
 _DLPACK_PLATFORMS = ("gpu",)
 
+class UnspecifiedOutputShapeDtype:
+  pass
 
 def call_tf(
     callable_tf: Callable,
     has_side_effects=True,
     ordered=False,
-    output_shape_dtype=None,
+    output_shape_dtype=UnspecifiedOutputShapeDtype(),
     call_tf_graph=False,
 ) -> Callable:
   """Calls a TensorFlow function from JAX, with support for reverse autodiff.
@@ -134,7 +136,7 @@ def call_tf(
       return tf.TensorSpec(a_tf_shape, a_tf_dtype)
     args_flat_sig_tf = tuple(map(make_tensorspec, args_flat_jax))
 
-    if output_shape_dtype is not None:
+    if not isinstance(output_shape_dtype, UnspecifiedOutputShapeDtype):
       output_shape_dtype_flat, output_shape_dtype_tree = tree_util.tree_flatten(output_shape_dtype)
       output_avals = tuple(core.ShapedArray(st.shape, st.dtype) for st in output_shape_dtype_flat)
     else:
@@ -427,10 +429,6 @@ def _call_tf_abstract_eval(
   if len(concrete_function_flat_tf.outputs) == 0:
     return tuple(), effects
 
-  if call_tf_graph and output_avals is None:
-    raise ValueError(
-        "call_tf with `call_tf_graph=True` must provide output_shape_dtype"
-        " arg.")
   if output_avals is not None:
     return output_avals, effects
 
@@ -641,7 +639,7 @@ def emit_tf_embedded_graph_custom_call(
       "has_token_input_output": ir.BoolAttr.get(ordered),
       "called_index": mlir.i64_attr(called_index),
   }
-  result_avals = output_avals if output_avals is not None else tuple()
+  result_avals = ctx.avals_out if ctx.avals_out is not None else tuple()
 
   operands = list(operands)
   result_types = list(
