@@ -53,6 +53,9 @@ Remember to align the itemized text with the first line of an item within a list
     [#16413](https://github.com/google/jax/issues/16413).
   * The deprecated config option `jax_jit_pjit_api_merge`, which did nothing,
     has been removed.
+  * jax2tf now uses native serialization by default. See
+    the [jax2tf documentation](https://github.com/google/jax/blob/main/jax/experimental/jax2tf/README.md)
+    for details.
 
 * New features
   * JAX now supports a configuration flag --jax_serialization_version
